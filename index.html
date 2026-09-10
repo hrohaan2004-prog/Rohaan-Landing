@@ -15,7 +15,33 @@
     --text: #eaeaf0;
     --muted: #9a9aad;
     --border: #232332;
+    --nav-bg: rgba(10, 10, 15, 0.85);
   }
+
+  body.light {
+    --bg: #f5f6fa;
+    --bg-card: #ffffff;
+    --accent: #6c5ce7;
+    --accent-2: #0089d2;
+    --text: #1a1a24;
+    --muted: #5a5a6e;
+    --border: #e0e0ea;
+    --nav-bg: rgba(245, 246, 250, 0.85);
+  }
+
+  .theme-toggle {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    width: 42px; height: 42px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s, border-color 0.3s;
+  }
+  .theme-toggle:hover { transform: rotate(20deg); border-color: var(--accent); }
 
   html { scroll-behavior: smooth; }
 
@@ -35,7 +61,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 1rem 8%;
-    background: rgba(10, 10, 15, 0.85);
+    background: var(--nav-bg);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border);
     z-index: 100;
@@ -231,6 +257,7 @@
     <li><a href="#skills">Skills</a></li>
     <li><a href="#contact">Contact</a></li>
   </ul>
+  <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">🌙</button>
 </nav>
 
 <header class="hero">
@@ -300,6 +327,26 @@
 <footer>Built with 💜 by Rohaan — © 2026</footer>
 
 <script>
+  const themeToggle = document.getElementById("themeToggle");
+
+  function applyTheme(theme) {
+    if (theme === "light") {
+      document.body.classList.add("light");
+      themeToggle.textContent = "☀️";
+    } else {
+      document.body.classList.remove("light");
+      themeToggle.textContent = "🌙";
+    }
+  }
+
+  applyTheme(localStorage.getItem("theme") || "dark");
+
+  themeToggle.addEventListener("click", () => {
+    const newTheme = document.body.classList.contains("light") ? "dark" : "light";
+    applyTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+  });
+
   const roles = [
     "Computer Science Student @ Iqra University",
     "Sales Expert",
