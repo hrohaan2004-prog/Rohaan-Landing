@@ -233,6 +233,58 @@
   }
   .contact-box p { color: var(--muted); margin-bottom: 2rem; }
 
+  .contact-form {
+    text-align: left;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  .contact-form .full { grid-column: 1 / -1; }
+  .contact-form label {
+    font-size: 0.85rem;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 0.4rem;
+  }
+  .contact-form input,
+  .contact-form textarea {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color 0.3s;
+  }
+  .contact-form input:focus,
+  .contact-form textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+  .contact-form textarea { resize: vertical; min-height: 120px; }
+  .contact-form button {
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+  .form-note {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 1rem;
+    text-align: center;
+  }
+  .form-note a { color: var(--accent-2); }
+
+  @media (max-width: 640px) {
+    .contact-form { grid-template-columns: 1fr; }
+  }
+
   /* ---------- Footer ---------- */
   footer {
     text-align: center;
@@ -319,8 +371,29 @@
 <section id="contact">
   <div class="contact-box">
     <h2 class="section-title">Let's <span>Connect</span></h2>
-    <p>Whether it's a project, a job opportunity, or just a chat about tech and sports — my inbox is always open.</p>
-    <a href="mailto:youremail@example.com" class="btn btn-primary">Say Hello 👋</a>
+    <p>Fill out the form and your message will come straight to my WhatsApp.</p>
+    <form class="contact-form" id="waForm">
+      <div>
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" placeholder="Your name" required>
+      </div>
+      <div>
+        <label for="phone">Phone No</label>
+        <input type="tel" id="phone" name="phone" placeholder="+92 3XX XXXXXXX" required>
+      </div>
+      <div class="full">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+      </div>
+      <div class="full">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" placeholder="Write your message..." required></textarea>
+      </div>
+      <div class="full">
+        <button type="submit" class="btn btn-primary">Send on WhatsApp 💬</button>
+      </div>
+    </form>
+    <p class="form-note">Prefer email? <a href="mailto:youremail@example.com">Mail me directly</a></p>
   </div>
 </section>
 
@@ -340,6 +413,25 @@
   }
 
   applyTheme(localStorage.getItem("theme") || "dark");
+
+  const WHATSAPP_NUMBER = "923330210274";
+
+  document.getElementById("waForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const phone = document.getElementById("phone").value.trim();
+    const message = document.getElementById("message").value.trim();
+
+    const text =
+      "New Contact Form Submission:%0A%0A" +
+      "👤 Name: " + encodeURIComponent(name) + "%0A" +
+      "📧 Email: " + encodeURIComponent(email) + "%0A" +
+      "📱 Phone: " + encodeURIComponent(phone) + "%0A" +
+      "💬 Message: " + encodeURIComponent(message);
+
+    window.open("https://wa.me/" + WHATSAPP_NUMBER + "?text=" + text, "_blank");
+  });
 
   themeToggle.addEventListener("click", () => {
     const newTheme = document.body.classList.contains("light") ? "dark" : "light";
